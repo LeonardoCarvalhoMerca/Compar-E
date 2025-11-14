@@ -252,9 +252,6 @@
             }
         }
 
-        // ===================================
-        // === 👇 FUNÇÃO readExcel MODIFICADA 👇 ===
-        // ===================================
         function readExcel(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -278,30 +275,25 @@
                         const idColName = firstRow.id_cupom !== undefined ? 'id_cupom' : 
                                           (firstRow.Cupom !== undefined ? 'Cupom' : null);
                         
-                        // Procura por 'valor_final' OU 'Faturamento'
                         const valColName = firstRow.valor_final !== undefined ? 'valor_final' : 
                                            (firstRow.Faturamento !== undefined ? 'Faturamento' : null);
 
-                        // 2. Valida se a coluna de valor (obrigatória) foi encontrada
                         if (!valColName) {
                             reject(new Error(`A planilha '${file.name}' não contém a coluna obrigatória 'valor_final' ou 'Faturamento'.`));
                             return;
                         }
 
-                        // 3. Define o status da coluna de ID
                         const hasIdCupom = (idColName !== null);
 
                         let filteredData;
                         if (hasIdCupom) {
-                            // 4. Mapeia os dados usando os nomes de coluna encontrados
                             filteredData = jsonData.map(row => ({
-                                id_cupom: String(row[idColName]).split(':')[0], // Usa o nome da coluna de ID
-                                valor_final: row[valColName]                    // Usa o nome da coluna de Valor
+                                id_cupom: String(row[idColName]).split(':')[0],
+                                valor_final: row[valColName]                  
                             }));
                         } else {
-                            // 4b. Mapeia apenas o valor se o ID não existir
                             filteredData = jsonData.map(row => ({
-                                valor_final: row[valColName]                    // Usa o nome da coluna de Valor
+                                valor_final: row[valColName]                 
                             }));
                         }
                         
@@ -315,9 +307,6 @@
                 reader.readAsBinaryString(file);
             });
         }
-        // ===================================
-        // === 👆 FIM DA MODIFICAÇÃO 👆 ===
-        // ===================================
 
 
         function analisarCupons(dataA, dataB, analysisMode) {
@@ -552,3 +541,4 @@
 </body>
 
 </html>
+
